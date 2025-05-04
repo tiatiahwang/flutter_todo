@@ -11,25 +11,40 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Flutter Todo App',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(
+            color: Colors.black,
+            fontSize: 45,
+            fontWeight: FontWeight.bold,
+          ),
+          titleMedium: TextStyle(
+            color: Colors.grey,
+            fontSize: 16,
+            fontWeight: FontWeight.w300,
+          ),
+          displayMedium: TextStyle(color: Colors.white, fontSize: 21),
+          displaySmall: TextStyle(
+            color: Color.fromARGB(255, 234, 234, 234),
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+          ),
+          headlineMedium: TextStyle(color: Colors.grey, fontSize: 17),
+          headlineSmall: TextStyle(color: Colors.grey, fontSize: 16),
+          titleSmall: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
+          ),
+          titleLarge: TextStyle(
+            fontSize: 40,
+            color: Colors.black,
+            fontWeight: FontWeight.w300,
+          ),
+        ),
       ),
+
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
