@@ -1,9 +1,11 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:flutter_todo/extensions/space_exs.dart';
 import 'package:flutter_todo/utils/app_colors.dart';
 import 'package:flutter_todo/utils/app_str.dart';
 import 'package:flutter_todo/utils/constants.dart';
+import 'package:flutter_todo/views/home/components/home_app_bar.dart';
 import 'package:flutter_todo/views/home/widget/fab.dart';
 import 'package:flutter_todo/views/home/widget/task_widget.dart';
 import 'package:lottie/lottie.dart';
@@ -16,7 +18,8 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final List<int> testing = [1, 2, 3];
+  final GlobalKey<SliderDrawerState> drawerKey = GlobalKey<SliderDrawerState>();
+  final List<int> testing = [];
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,18 @@ class _HomeViewState extends State<HomeView> {
       floatingActionButton: const Fab(),
 
       // Body
-      body: _buildHomeBody(textTheme),
+      body: SliderDrawer(
+        key: drawerKey,
+        isDraggable: false,
+        animationDuration: 1000,
+        // Drawer
+        slider: Container(color: Colors.red),
+
+        appBar: HomeAppBar(drawerKey: drawerKey),
+
+        // Main body
+        child: _buildHomeBody(textTheme),
+      ),
     );
   }
 
