@@ -6,6 +6,7 @@ import 'package:flutter_todo/utils/app_colors.dart';
 import 'package:flutter_todo/utils/app_str.dart';
 import 'package:flutter_todo/utils/constants.dart';
 import 'package:flutter_todo/views/home/components/home_app_bar.dart';
+import 'package:flutter_todo/views/home/components/slider_drawer.dart';
 import 'package:flutter_todo/views/home/widget/fab.dart';
 import 'package:flutter_todo/views/home/widget/task_widget.dart';
 import 'package:lottie/lottie.dart';
@@ -38,7 +39,7 @@ class _HomeViewState extends State<HomeView> {
         animationDuration: 1000,
 
         // Drawer
-        slider: Container(color: Colors.red),
+        slider: CustomDrawer(),
 
         appBar: HomeAppBar(drawerKey: drawerKey),
 
