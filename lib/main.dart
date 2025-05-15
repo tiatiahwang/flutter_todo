@@ -23,6 +23,7 @@ Future<void> main() async {
   runApp(BaseWidget(child: const MyApp()));
 }
 
+// pass data between widgets
 class BaseWidget extends InheritedWidget {
   BaseWidget({super.key, required this.child}) : super(child: child);
 
