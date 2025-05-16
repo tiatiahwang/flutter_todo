@@ -3,6 +3,7 @@ import "dart:developer";
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker_fork/flutter_cupertino_date_picker_fork.dart';
 import 'package:flutter_todo/extensions/space_exs.dart';
+import 'package:flutter_todo/models/task.dart';
 import 'package:flutter_todo/utils/app_colors.dart';
 import 'package:flutter_todo/utils/app_str.dart';
 import 'package:flutter_todo/views/tasks/components/date_time_selection.dart';
@@ -10,16 +11,31 @@ import 'package:flutter_todo/views/tasks/components/rep_textfield.dart';
 import 'package:flutter_todo/views/tasks/widget/task_view_app_bar.dart';
 
 class TaskView extends StatefulWidget {
-  const TaskView({super.key});
+  TaskView({
+    super.key,
+    required this.taskControllerForTitle,
+    required this.taskControllerForSubtitle,
+    required this.task,
+  });
+
+  TextEditingController? taskControllerForTitle;
+  TextEditingController? taskControllerForSubtitle;
+  final Task? task;
 
   @override
   State<TaskView> createState() => _TaskViewState();
 }
 
 class _TaskViewState extends State<TaskView> {
-  final TextEditingController titleTaskController = TextEditingController();
-  final TextEditingController descriptionTaskController =
-      TextEditingController();
+  // If task already exists, return true
+  bool isTaskAlreadyExist() {
+    if (widget.taskControllerForTitle?.text == null &&
+        widget.taskControllerForSubtitle?.text == null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,13 +142,13 @@ class _TaskViewState extends State<TaskView> {
           ),
 
           // Task Title
-          RepTextField(controller: titleTaskController),
+          RepTextField(controller: widget.taskControllerForTitle),
 
           10.h,
 
           // Task Description
           RepTextField(
-            controller: descriptionTaskController,
+            controller: widget.taskControllerForSubtitle,
             isForDescription: true,
           ),
 
@@ -186,10 +202,13 @@ class _TaskViewState extends State<TaskView> {
           // Divider
           const SizedBox(width: 70, child: Divider(thickness: 2)),
 
-          // Text will be changed: "ADD NEW TASK" or "UPDATE CURRENT"
+          // Top Title
           RichText(
             text: TextSpan(
-              text: AppStr.addNewTask,
+              text:
+                  isTaskAlreadyExist()
+                      ? AppStr.addNewTask
+                      : AppStr.updateCurrentTask,
               style: textTheme.titleLarge,
               children: [
                 TextSpan(

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_todo/utils/app_str.dart';
 
 class RepTextField extends StatelessWidget {
-  const RepTextField({
+  RepTextField({
     super.key,
     required this.controller,
     this.isForDescription = false,
   });
 
-  final TextEditingController controller;
+  TextEditingController? controller;
   final bool isForDescription;
 
   @override

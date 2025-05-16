@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:flutter_todo/extensions/space_exs.dart';
+import 'package:flutter_todo/models/task.dart';
 import 'package:flutter_todo/utils/app_colors.dart';
 import 'package:flutter_todo/utils/app_str.dart';
 import 'package:flutter_todo/utils/constants.dart';
@@ -20,7 +21,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final GlobalKey<SliderDrawerState> drawerKey = GlobalKey<SliderDrawerState>();
-  final List<int> testing = [1, 2, 3];
+  final List<int> testing = [1];
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +104,7 @@ class _HomeViewState extends State<HomeView> {
             child:
                 testing.isNotEmpty
                     ? ListView.builder(
-                      itemCount: testing.length,
+                      itemCount: 1,
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
                         return Dismissible(
@@ -123,7 +124,16 @@ class _HomeViewState extends State<HomeView> {
                             ],
                           ),
                           key: Key(index.toString()),
-                          child: const TaskWidget(),
+                          child: TaskWidget(
+                            task: Task(
+                              id: "1",
+                              title: "Home Task",
+                              subTitle: "Grocery shopping",
+                              createdAtTime: DateTime.now(),
+                              createdAtDate: DateTime.now(),
+                              isCompleted: false,
+                            ),
+                          ),
                         );
                       },
                     )
