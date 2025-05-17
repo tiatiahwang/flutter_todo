@@ -19,7 +19,7 @@ dynamic emptyWanring(BuildContext context) {
 }
 
 // nothing entered when user try to edit or update the task
-dynamic updateTaskWanring(BuildContext context) {
+dynamic updateTaskWarning(BuildContext context) {
   return FToast.toast(
     context,
     msg: AppStr.oopsMsg,

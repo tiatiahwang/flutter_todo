@@ -1,11 +1,11 @@
-import "dart:developer";
-
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_date_picker_fork/flutter_cupertino_date_picker_fork.dart';
 import 'package:flutter_todo/extensions/space_exs.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:flutter_todo/models/task.dart';
 import 'package:flutter_todo/utils/app_colors.dart';
 import 'package:flutter_todo/utils/app_str.dart';
+import 'package:flutter_todo/utils/constants.dart';
 import 'package:flutter_todo/views/tasks/components/date_time_selection.dart';
 import 'package:flutter_todo/views/tasks/components/rep_textfield.dart';
 import 'package:flutter_todo/views/tasks/widget/task_view_app_bar.dart';
@@ -48,6 +48,19 @@ class _TaskViewState extends State<TaskView> {
     }
   }
 
+  // format inititial time and date
+  DateTime formatInitial(DateTime? date) {
+    if (widget.task?.createdAtDate == null) {
+      if (date == null) {
+        return DateTime.now();
+      } else {
+        return date;
+      }
+    } else {
+      return widget.task!.createdAtDate;
+    }
+  }
+
   // Show selected date as string format
   String showDate(DateTime? date) {
     if (widget.task?.createdAtDate == null) {
@@ -68,6 +81,41 @@ class _TaskViewState extends State<TaskView> {
       return true;
     } else {
       return false;
+    }
+  }
+
+  // main function for creating or updating task
+  dynamic createOrUpdateTask() {
+    // update
+    if (widget.taskControllerForTitle?.text != null &&
+        widget.taskControllerForSubtitle?.text != null) {
+      try {
+        widget.taskControllerForTitle?.text = title;
+        widget.taskControllerForSubtitle?.text = subTitle;
+
+        widget.task?.save();
+
+        // todo: pop page
+      } catch (e) {
+        updateTaskWarning(context);
+      }
+    } else {
+      // create new task
+      if (title != null && subTitle != null) {
+        var task = Task.create(
+          title: title,
+          subTitle: subTitle,
+          createdAtDate: date,
+          createdAtTime: time,
+        );
+
+        // add task data to Hibe DB using inherited widghet
+        BaseWidget.of(context).dataStore.addTask(task: task);
+
+        // todo: pop page
+      } else {
+        emptyWanring(context);
+      }
     }
   }
 
@@ -110,37 +158,39 @@ class _TaskViewState extends State<TaskView> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment:
+            isTaskAlreadyExist()
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.spaceEvenly,
         children: [
-          // Delete Button
-          MaterialButton(
-            onPressed: () {
-              // todo: delete task
-              log('delete task');
-            },
-            minWidth: 150,
-            height: 55,
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.close, color: AppColors.primaryColor),
-                5.w,
-                const Text(
-                  AppStr.deleteTask,
-                  style: TextStyle(color: AppColors.primaryColor),
+          isTaskAlreadyExist()
+              ? Container()
+              :
+              // Delete Button
+              MaterialButton(
+                onPressed: () {},
+                minWidth: 150,
+                height: 55,
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
                 ),
-              ],
-            ),
-          ),
+                child: Row(
+                  children: [
+                    Icon(Icons.close, color: AppColors.primaryColor),
+                    5.w,
+                    const Text(
+                      AppStr.deleteTask,
+                      style: TextStyle(color: AppColors.primaryColor),
+                    ),
+                  ],
+                ),
+              ),
 
           // Add or Update Button
           MaterialButton(
             onPressed: () {
-              // todo: add or update task
-              log('add task');
+              createOrUpdateTask();
             },
             minWidth: 150,
             height: 55,
@@ -210,7 +260,7 @@ class _TaskViewState extends State<TaskView> {
                     (_) => SizedBox(
                       height: 280,
                       child: TimePickerWidget(
-                        // initDateTime: ,
+                        initDateTime: formatInitial(time),
                         dateFormat: 'HH:mm',
                         onChange: (_, __) {},
                         onConfirm: (dateTime, _) {
@@ -237,7 +287,7 @@ class _TaskViewState extends State<TaskView> {
                 context,
                 maxDateTime: DateTime(2030, 4, 5),
                 minDateTime: DateTime.now(),
-                // initialDateTime:
+                initialDateTime: formatInitial(date),
                 onConfirm: (dateTime, _) {
                   setState(() {
                     if (widget.task?.createdAtDate == null) {
