@@ -9,17 +9,18 @@ import 'package:flutter_todo/utils/app_str.dart';
 import 'package:flutter_todo/views/tasks/components/date_time_selection.dart';
 import 'package:flutter_todo/views/tasks/components/rep_textfield.dart';
 import 'package:flutter_todo/views/tasks/widget/task_view_app_bar.dart';
+import 'package:intl/intl.dart';
 
 class TaskView extends StatefulWidget {
-  TaskView({
+  const TaskView({
     super.key,
     required this.taskControllerForTitle,
     required this.taskControllerForSubtitle,
     required this.task,
   });
 
-  TextEditingController? taskControllerForTitle;
-  TextEditingController? taskControllerForSubtitle;
+  final TextEditingController? taskControllerForTitle;
+  final TextEditingController? taskControllerForSubtitle;
   final Task? task;
 
   @override
@@ -27,6 +28,39 @@ class TaskView extends StatefulWidget {
 }
 
 class _TaskViewState extends State<TaskView> {
+  var title;
+  var subTitle;
+  DateTime? time;
+  DateTime? date;
+
+  // Show selected time as string format
+  String showTime(DateTime? time) {
+    if (widget.task?.createdAtTime == null) {
+      if (time == null) {
+        return DateFormat('hh:mm a').format(DateTime.now()).toString();
+      } else {
+        return DateFormat('hh:mm a').format(time).toString();
+      }
+    } else {
+      return DateFormat(
+        'hh:mm a',
+      ).format(widget.task!.createdAtTime).toString();
+    }
+  }
+
+  // Show selected date as string format
+  String showDate(DateTime? date) {
+    if (widget.task?.createdAtDate == null) {
+      if (date == null) {
+        return DateFormat.MMMEd().format(DateTime.now()).toString();
+      } else {
+        return DateFormat.MMMEd().format(date).toString();
+      }
+    } else {
+      return DateFormat.MMMEd().format(widget.task!.createdAtDate).toString();
+    }
+  }
+
   // If task already exists, return true
   bool isTaskAlreadyExist() {
     if (widget.taskControllerForTitle?.text == null &&
@@ -142,7 +176,15 @@ class _TaskViewState extends State<TaskView> {
           ),
 
           // Task Title
-          RepTextField(controller: widget.taskControllerForTitle),
+          RepTextField(
+            controller: widget.taskControllerForTitle,
+            onFieldSubmitted: (String inputTitle) {
+              title = inputTitle;
+            },
+            onChanged: (String inputTitle) {
+              title = inputTitle;
+            },
+          ),
 
           10.h,
 
@@ -150,6 +192,12 @@ class _TaskViewState extends State<TaskView> {
           RepTextField(
             controller: widget.taskControllerForSubtitle,
             isForDescription: true,
+            onFieldSubmitted: (String inputSubtitle) {
+              subTitle = inputSubtitle;
+            },
+            onChanged: (String inputSubtitle) {
+              subTitle = inputSubtitle;
+            },
           ),
 
           // Time Selection
@@ -163,13 +211,23 @@ class _TaskViewState extends State<TaskView> {
                       height: 280,
                       child: TimePickerWidget(
                         // initDateTime: ,
-                        onChange: (_, __) {},
                         dateFormat: 'HH:mm',
-                        onConfirm: (dateTime, _) {},
+                        onChange: (_, __) {},
+                        onConfirm: (dateTime, _) {
+                          setState(() {
+                            if (widget.task?.createdAtTime == null) {
+                              time = dateTime;
+                            } else {
+                              widget.task!.createdAtTime = dateTime;
+                            }
+                          });
+                        },
                       ),
                     ),
               );
             },
+            isTime: true,
+            time: showTime(time),
           ),
 
           // Date Selection
@@ -180,10 +238,19 @@ class _TaskViewState extends State<TaskView> {
                 maxDateTime: DateTime(2030, 4, 5),
                 minDateTime: DateTime.now(),
                 // initialDateTime:
-                onConfirm: (dateTime, _) {},
+                onConfirm: (dateTime, _) {
+                  setState(() {
+                    if (widget.task?.createdAtDate == null) {
+                      date = dateTime;
+                    } else {
+                      widget.task!.createdAtDate = dateTime;
+                    }
+                  });
+                },
               );
             },
             title: AppStr.dateString,
+            time: showDate(date),
           ),
         ],
       ),
