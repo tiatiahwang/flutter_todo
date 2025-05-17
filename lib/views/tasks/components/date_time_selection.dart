@@ -39,7 +39,7 @@ class DateTimeSelectionWidget extends StatelessWidget {
 
             Container(
               margin: const EdgeInsets.only(right: 10),
-              width: isTime ? 80 : 100,
+              width: isTime ? 80 : 150,
               height: 35,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),

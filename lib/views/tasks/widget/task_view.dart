@@ -52,12 +52,12 @@ class _TaskViewState extends State<TaskView> {
   String showDate(DateTime? date) {
     if (widget.task?.createdAtDate == null) {
       if (date == null) {
-        return DateFormat.MMMEd().format(DateTime.now()).toString();
+        return DateFormat.yMMMEd().format(DateTime.now()).toString();
       } else {
-        return DateFormat.MMMEd().format(date).toString();
+        return DateFormat.yMMMEd().format(date).toString();
       }
     } else {
-      return DateFormat.MMMEd().format(widget.task!.createdAtDate).toString();
+      return DateFormat.yMMMEd().format(widget.task!.createdAtDate).toString();
     }
   }
 
