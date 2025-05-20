@@ -118,20 +118,20 @@ class _TaskWidgetState extends State<TaskWidget> {
 
           // Date of task
           trailing: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 DateFormat('hh:mm a').format(widget.task.createdAtTime),
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 10,
                   color: widget.task.isCompleted ? Colors.white : Colors.grey,
                 ),
               ),
               Text(
-                DateFormat.MMMEd().format(widget.task.createdAtDate),
+                DateFormat.yMMMEd().format(widget.task.createdAtDate),
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: 10,
                   color: widget.task.isCompleted ? Colors.white : Colors.grey,
                 ),
               ),

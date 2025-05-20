@@ -1,6 +1,9 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
+import 'package:flutter_todo/main.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
+
 import 'package:flutter_todo/extensions/space_exs.dart';
 import 'package:flutter_todo/models/task.dart';
 import 'package:flutter_todo/utils/app_colors.dart';
@@ -21,36 +24,48 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final GlobalKey<SliderDrawerState> drawerKey = GlobalKey<SliderDrawerState>();
-  final List<int> testing = [1];
 
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
+    final base = BaseWidget.of(context);
 
-      // Floating Action Button
-      floatingActionButton: const Fab(),
+    return ValueListenableBuilder(
+      valueListenable: base.dataStore.listenToTask(),
+      builder: (ctx, Box<Task> box, Widget? child) {
+        var tasks = box.values.toList();
 
-      // Body
-      body: SliderDrawer(
-        key: drawerKey,
-        isDraggable: false,
-        animationDuration: 1000,
+        return Scaffold(
+          backgroundColor: Colors.white,
 
-        // Drawer
-        slider: CustomDrawer(),
+          // Floating Action Button
+          floatingActionButton: const Fab(),
 
-        appBar: HomeAppBar(drawerKey: drawerKey),
+          // Body
+          body: SliderDrawer(
+            key: drawerKey,
+            isDraggable: false,
+            animationDuration: 1000,
 
-        // Main Body
-        child: _buildHomeBody(textTheme),
-      ),
+            // Drawer
+            slider: CustomDrawer(),
+
+            appBar: HomeAppBar(drawerKey: drawerKey),
+
+            // Main Body
+            child: _buildHomeBody(textTheme, base, tasks),
+          ),
+        );
+      },
     );
   }
 
-  SizedBox _buildHomeBody(TextTheme textTheme) {
+  Widget _buildHomeBody(
+    TextTheme textTheme,
+    BaseWidget base,
+    List<Task> tasks,
+  ) {
     return SizedBox(
       width: double.infinity,
       height: double.infinity,
@@ -102,11 +117,13 @@ class _HomeViewState extends State<HomeView> {
             width: double.infinity,
             height: 585,
             child:
-                testing.isNotEmpty
+                tasks.isNotEmpty
                     ? ListView.builder(
-                      itemCount: 1,
+                      itemCount: tasks.length,
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
+                        var task = tasks[index];
+
                         return Dismissible(
                           direction: DismissDirection.horizontal,
                           onDismissed: (_) {
@@ -124,16 +141,7 @@ class _HomeViewState extends State<HomeView> {
                             ],
                           ),
                           key: Key(index.toString()),
-                          child: TaskWidget(
-                            task: Task(
-                              id: "1",
-                              title: "Home Task",
-                              subTitle: "Grocery shopping",
-                              createdAtTime: DateTime.now(),
-                              createdAtDate: DateTime.now(),
-                              isCompleted: false,
-                            ),
-                          ),
+                          child: TaskWidget(task: task),
                         );
                       },
                     )
@@ -148,7 +156,7 @@ class _HomeViewState extends State<HomeView> {
                             height: 200,
                             child: Lottie.asset(
                               lottieURL,
-                              animate: testing.isNotEmpty ? false : true,
+                              animate: tasks.isNotEmpty ? false : true,
                             ),
                           ),
                         ),
