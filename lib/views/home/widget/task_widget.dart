@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/models/task.dart';
 import 'package:flutter_todo/utils/app_colors.dart';
+import 'package:flutter_todo/views/tasks/widget/task_view.dart';
 import 'package:intl/intl.dart';
 
 class TaskWidget extends StatefulWidget {
@@ -34,7 +36,18 @@ class _TaskWidgetState extends State<TaskWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // todo: navigate to task detail view
+        //navigate to task detail view
+        Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder:
+                (context) => TaskView(
+                  taskControllerForTitle: taskControllerForTitle,
+                  taskControllerForSubtitle: taskControllerForSubtitle,
+                  task: widget.task,
+                ),
+          ),
+        );
       },
       // Task Card
       child: AnimatedContainer(
