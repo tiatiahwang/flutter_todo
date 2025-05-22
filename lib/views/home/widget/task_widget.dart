@@ -59,6 +59,8 @@ class _TaskWidgetState extends State<TaskWidget> {
           leading: GestureDetector(
             onTap: () {
               // Check or uncheck the task
+              widget.task.isCompleted = !widget.task.isCompleted;
+              widget.task.save();
             },
             child: AnimatedContainer(
               width: 30,
