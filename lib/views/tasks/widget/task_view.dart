@@ -94,8 +94,7 @@ class _TaskViewState extends State<TaskView> {
         widget.taskControllerForSubtitle?.text = subTitle;
 
         widget.task?.save();
-
-        // todo: pop page
+        Navigator.pop(context);
       } catch (e) {
         updateTaskWarning(context);
       }
@@ -111,8 +110,7 @@ class _TaskViewState extends State<TaskView> {
 
         // add task data to Hibe DB using inherited widghet
         BaseWidget.of(context).dataStore.addTask(task: task);
-
-        // todo: pop page
+        Navigator.pop(context);
       } else {
         emptyWanring(context);
       }
