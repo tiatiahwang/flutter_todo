@@ -36,7 +36,7 @@ class _TaskWidgetState extends State<TaskWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        //navigate to task detail view
+        // navigate to task view
         Navigator.push(
           context,
           CupertinoPageRoute(

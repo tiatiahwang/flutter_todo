@@ -25,6 +25,26 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final GlobalKey<SliderDrawerState> drawerKey = GlobalKey<SliderDrawerState>();
 
+  // check value of circle indicator
+  dynamic valueOfIndicator(List<Task> task) {
+    if (task.isNotEmpty) {
+      return task.length;
+    } else {
+      return 2;
+    }
+  }
+
+  // check completed tasks
+  int checkCompletedTasks(List<Task> tasks) {
+    int i = 0;
+    for (Task completedTask in tasks) {
+      if (completedTask.isCompleted) {
+        i++;
+      }
+    }
+    return i;
+  }
+
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
@@ -85,8 +105,8 @@ class _HomeViewState extends State<HomeView> {
                 SizedBox(
                   width: 30,
                   height: 30,
-                  child: const CircularProgressIndicator(
-                    value: 1 / 3,
+                  child: CircularProgressIndicator(
+                    value: checkCompletedTasks(tasks) / valueOfIndicator(tasks),
                     backgroundColor: Colors.grey,
                     valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),
                   ),
@@ -101,7 +121,10 @@ class _HomeViewState extends State<HomeView> {
                   children: [
                     Text(AppStr.mainTitle, style: textTheme.displayLarge),
                     3.h,
-                    Text("1 of 3 tasks", style: textTheme.titleMedium),
+                    Text(
+                      "${checkCompletedTasks(tasks)} of ${tasks.length} task",
+                      style: textTheme.titleMedium,
+                    ),
                   ],
                 ),
               ],
