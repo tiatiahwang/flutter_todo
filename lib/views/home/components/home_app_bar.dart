@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:flutter_todo/utils/constants.dart';
 
 class HomeAppBar extends StatefulWidget {
@@ -49,6 +50,8 @@ class _HomeAppBarState extends State<HomeAppBar>
 
   @override
   Widget build(BuildContext context) {
+    var base = BaseWidget.of(context).dataStore.box;
+
     return SizedBox(
       width: double.infinity,
       height: 130,
@@ -75,7 +78,9 @@ class _HomeAppBarState extends State<HomeAppBar>
               padding: const EdgeInsets.only(right: 20),
               child: IconButton(
                 onPressed: () {
-                  deleteAllTasks(context);
+                  base.isEmpty
+                      ? noTaskWarning(context)
+                      : deleteAllTasks(context);
                 },
                 icon: const Icon(CupertinoIcons.trash_fill, size: 32),
               ),

@@ -1,5 +1,6 @@
 // lottie asset location
 import 'package:flutter/material.dart';
+import 'package:flutter_todo/main.dart';
 import 'package:ftoast/ftoast.dart';
 import 'package:panara_dialogs/panara_dialogs.dart';
 import 'package:flutter_todo/utils/app_str.dart';
@@ -54,7 +55,7 @@ dynamic deleteAllTasks(BuildContext context) {
     confirmButtonText: "Yes",
     cancelButtonText: "No",
     onTapConfirm: () {
-      // BaseWidget.of(context).dataStore.box.clear();
+      BaseWidget.of(context).dataStore.box.clear();
       Navigator.pop(context);
     },
     onTapCancel: () {
