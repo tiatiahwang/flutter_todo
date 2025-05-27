@@ -204,8 +204,10 @@ class _TaskViewState extends State<TaskView> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
             ),
-            child: const Text(
-              AppStr.addTaskString,
+            child: Text(
+              isTaskAlreadyExist()
+                  ? AppStr.addTaskString
+                  : AppStr.updateTaskString,
               style: TextStyle(color: Colors.white),
             ),
           ),
